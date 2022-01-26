@@ -4,6 +4,7 @@ import { Rating } from '@material-ui/lab'
 import GoogleMapReact from 'google-map-react'
 import React, { useContext } from 'react'
 import { GlobalContext } from '../../context/GlobalContext'
+import { mapStyles } from './mapStyles'
 import useStyles from './style'
 
 export default function Map() {
@@ -13,6 +14,7 @@ export default function Map() {
     setCoordinates,
     coordinates,
     setBounds,
+    weatherData
   } = useContext(GlobalContext)
   const classes = useStyles()
   const isDesktop = useMediaQuery('(min-width:600px)')
@@ -23,14 +25,14 @@ export default function Map() {
     <>
       <div className={classes.mapContainer}>
         <GoogleMapReact
-          // bootstrapURLKeys={{ key: 'AIzaSyDKAIWbkM0JwPKv5CVcIvM_iYsj5c7XtMs' }}
-          // bootstrapURLKeys={{ key: 'AIzaSyCycdhw4EzSNqG1HbR6wPwGxiopxb4Dzu0' }}
-          bootstrapURLKeys={{ key: 'AIzaSyBwDO2qKDHcBy7tahPkgTTAltmOi3cjeHM' }}
+          // bootstrapURLKeys={{ key: 'AIzaSyDKAIWbkM0JwPKv5CVcIvM_iYsj5c7XtMs' }}//youtube api
+          bootstrapURLKeys={{ key: 'AIzaSyCycdhw4EzSNqG1HbR6wPwGxiopxb4Dzu0' }}//Annon api
+          // bootstrapURLKeys={{ key: 'AIzaSyBwDO2qKDHcBy7tahPkgTTAltmOi3cjeHM' }}//my api
           defaultCenter={coordinates}
           center={coordinates}
           defaultZoom={14}
           margin={[50, 50, 50, 50]}
-          options={''}
+          options={{disableDefaultUI:true,zoomControl:true,styles: mapStyles}}
           onChange={(e) => {
             setCoordinates({ lat: e.center.lat, lng: e.center.lng })
             setBounds({ ne: e.marginBounds.ne, sw: e.marginBounds.sw })
@@ -70,6 +72,17 @@ export default function Map() {
               )}
             </div>
           ))}
+          {
+            weatherData?.list?.map((data,i)=>{
+              console.log(data);
+
+               return (
+                <div className="" key={i} lat={data.coord.lat} lng={data.coord.lon}>
+                  <img height={100} src={`https://openweathermap.org/img/w/${data.weather[0].icon}.png`} alt="" />
+                </div>
+              )
+            })
+          }
         </GoogleMapReact>
       </div>
     </>

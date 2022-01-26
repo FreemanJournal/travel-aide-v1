@@ -4,7 +4,7 @@ import axios from 'axios'
 const URL = 'https://travel-advisor.p.rapidapi.com/restaurants/list-in-boundary'
 
 
-export const getPlacesData = async (type,sw, ne) => {
+export const getPlacesData = async (type, sw, ne) => {
 
   try {
 
@@ -28,5 +28,24 @@ export const getPlacesData = async (type,sw, ne) => {
     return data
   } catch (error) {
     console.log(error)
+  }
+}
+
+export const getWeatherData = async (lat,lng) => {
+  try {
+    const { data } = await axios.get(`https://community-open-weather-map.p.rapidapi.com/find`, {
+      params: {
+        lon: lng,
+        lat: lat,
+      },
+      headers: {
+        'x-rapidapi-host': 'community-open-weather-map.p.rapidapi.com',
+        'x-rapidapi-key': 'fcacc6e166msh7021f397bc46930p1f463djsncadb6006dcee'
+      }
+    })
+
+    return data;
+  } catch (error) {
+    console.log(error);
   }
 }

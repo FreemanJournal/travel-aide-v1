@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from 'react'
-import { getPlacesData } from '../api'
+import { getPlacesData, getWeatherData } from '../api'
 const initialState = []
 export const GlobalContext = createContext(initialState)
 export const Provider = ({ children }) => {
@@ -11,6 +11,7 @@ export const Provider = ({ children }) => {
     const [rating, setRating] = useState(0)
     const [coordinates, setCoordinates] = useState()
     const [bounds, setBounds] = useState({ ne: 0, sw: 0 })
+    const [weatherData, setWeatherData] = useState([]);
 
 
     useEffect(() => {
@@ -28,12 +29,19 @@ export const Provider = ({ children }) => {
 
 
     useEffect(() => {
-        setLoading(true)
-        getPlacesData(type, bounds.sw, bounds.ne).then((data) => {
-            setData(data)
-            setLoading(false)
-        })
-    }, [coordinates, bounds, type])
+        if (bounds.ne && bounds.sw) {
+            setLoading(true)
+            getWeatherData(coordinates.lat,coordinates.lng).then((data)=>{
+                setWeatherData(data)
+            })
+
+            getPlacesData(type, bounds.sw, bounds.ne).then((data) => {
+                setData(data?.filter((place) => place.name && place.num_reviews > 0))
+                setLoading(false)
+            })
+        }
+
+    }, [bounds, type])
 
 
 
@@ -55,6 +63,7 @@ export const Provider = ({ children }) => {
                 setCoordinates,
                 bounds,
                 setBounds,
+                weatherData
             }}
         >
             {children}

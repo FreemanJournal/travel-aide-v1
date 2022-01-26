@@ -25,9 +25,7 @@ export default function Map() {
     <>
       <div className={classes.mapContainer}>
         <GoogleMapReact
-          // bootstrapURLKeys={{ key: 'AIzaSyDKAIWbkM0JwPKv5CVcIvM_iYsj5c7XtMs' }}//youtube api
-          bootstrapURLKeys={{ key: 'AIzaSyCycdhw4EzSNqG1HbR6wPwGxiopxb4Dzu0' }}//Annon api
-          // bootstrapURLKeys={{ key: 'AIzaSyBwDO2qKDHcBy7tahPkgTTAltmOi3cjeHM' }}//my api
+          bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_MAPS_API_KEY}}
           defaultCenter={coordinates}
           center={coordinates}
           defaultZoom={14}
